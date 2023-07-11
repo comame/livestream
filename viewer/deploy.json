@@ -1,0 +1,5 @@
+{
+    "name": "livestream-viewer",
+    "namespace": "livestream",
+    "prebuild": "go build ."
+}
