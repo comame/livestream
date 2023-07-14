@@ -10,6 +10,7 @@
 <body>
     <script src="./hls.js"></script>
     <video id="video" controls autoplay></video>
+    <dialog id="dialog"></dialog>
     <script>
         const video = document.getElementById('video')
         const streamKey = '---stream-key---'
@@ -21,6 +22,34 @@
             hls.attachMedia(video);
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = src;
+        }
+
+        checkLive()
+        setInterval(checkLive, 5000)
+
+        /** @type {HTMLDialogElement} */
+        const dialog = document.getElementById('dialog')
+        let isFirstLiveCheck = true
+        async function checkLive() {
+            if (await isLive(src)) {
+                isFirstLiveCheck = false
+                dialog.close()
+                return
+            }
+
+            if (isFirstLiveCheck) {
+                dialog.textContent = '配信が始まっていません。'
+            } else {
+                dialog.textContent = '配信は終了しました。'
+            }
+            if (!dialog.open) {
+                dialog.showModal()
+            }
+        }
+
+        async function isLive(src) {
+            const res = await fetch(src)
+            return res.status === 200
         }
     </script>
     <style>
