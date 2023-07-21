@@ -1,4 +1,5 @@
 {
     "name": "livestream",
-    "namespace": "livestream"
+    "namespace": "livestream",
+    "prebuild": "./prebuild.sh"
 }

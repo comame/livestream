@@ -16,9 +16,11 @@ RUN ./configure --with-http_ssl_module --add-module=../nginx-rtmp-module \
 
 RUN mkdir -p /var/local/www/hls && chmod 777 /var/local/www/hls
 
+COPY ./cleanup/cleanup /root/cleanup
+
 COPY ./nginx.conf /usr/local/nginx/conf/nginx.conf
 
 EXPOSE 1935
 EXPOSE 8080
 
-CMD /usr/local/nginx/sbin/nginx; while : ; do sleep 1; done
+CMD /usr/local/nginx/sbin/nginx; while : ; do HLS_PATH=/var/local/www/hls /root/cleanup; sleep 60; done
